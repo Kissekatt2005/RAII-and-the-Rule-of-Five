@@ -1,0 +1,7 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="RAII and the Rule of Five/RAII and the Rule of Five.vcxproj" Id="c093dd2b-5ab1-44e0-82e6-34c8f5da61dc" />
+</Solution>
