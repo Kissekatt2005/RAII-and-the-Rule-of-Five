@@ -13,9 +13,9 @@ namespace workshop {
 		explicit NaiveVector(std::size_t count, int value = 0) :size_{ count }, data_{ count > 0 ? new int[count] : nullptr } {
 			if (data_ != nullptr)
 			{
+		}
 				std::fill_n(data_, size_, value);
 			}
-		}
 		~NaiveVector() {
 			delete[]data_;
 		}
