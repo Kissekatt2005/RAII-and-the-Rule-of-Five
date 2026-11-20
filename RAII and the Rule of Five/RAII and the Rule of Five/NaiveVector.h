@@ -130,9 +130,10 @@ namespace workshop {
 
 		void push_back(value_type value) {
 			
-			size_++;
-			data_[size_] = value;
-
+			NaiveVector copy(size_ + 1);
+			std::copy(begin(), end(), copy.begin());
+			copy[size_] = value;
+			swap(copy);
 		}
 
 		std::size_t size() const noexcept { return size_; };
@@ -168,12 +169,13 @@ namespace workshop {
 		size_type	size_ = 0;
 		value_type* data_ = nullptr;
 	};
-
-	inline bool operator==(const NaiveVector<int>& lhs, const NaiveVector<int>& rhs) noexcept {
+	template<class T>
+	inline bool operator==(const NaiveVector<T>& lhs, const NaiveVector<T>& rhs) noexcept {
 		return lhs.size() == rhs.size() && std::ranges::equal(lhs, rhs);
 	}
 
-	inline auto operator<=>(const NaiveVector<int>& lhs, const NaiveVector<int>& rhs) noexcept {
+	template<class T>
+	inline auto operator<=>(const NaiveVector<T>& lhs, const NaiveVector<T>& rhs) noexcept {
 		return std::lexicographical_compare_three_way(
 			lhs.begin(), lhs.end(),
 			rhs.begin(), rhs.end());
