@@ -10,10 +10,11 @@
 #include <CodeAnalysis/Warnings.h>
 
 namespace workshop {
+	template<class T>
 	class NaiveVector
 	{
 	public:
-		using value_type = int;
+		using value_type = T;
 		using size_type = std::size_t;
 		using reference = value_type&;
 		using const_reference = const value_type&;
@@ -24,7 +25,7 @@ namespace workshop {
 		NaiveVector()  noexcept {};
 
 #pragma warning(suppress : 26409)
-		explicit NaiveVector(std::size_t count, int value = 0) :size_{ count }, data_{ count > 0 ? new int[count] : nullptr } {
+		explicit NaiveVector(std::size_t count, value_type value = 0) :size_{ count }, data_{ count > 0 ? new value_type[count] : nullptr } {
 			if (data_ != nullptr)
 			{
 			}
@@ -41,7 +42,7 @@ namespace workshop {
 			if (!empty()) {
 
 #pragma warning(suppress : 26409)
-				data_ = new int[size()];
+				data_ = new value_type[size()];
 #pragma warning(suppress : 26459)
 				std::copy(other.begin(), other.end(), begin());
 			}
@@ -122,10 +123,22 @@ namespace workshop {
 			return begin() + size();
 		}
 
+		void clear() noexcept {
+			data_ = nullptr;
+			size_ = 0;
+		}
+
+		void push_back(value_type value) {
+			
+			size_++;
+			data_[size_] = value;
+
+		}
+
 		std::size_t size() const noexcept { return size_; };
 		bool empty() const noexcept { return size_ == 0; };
-		const int* data() const noexcept { return data_; };
-		int* data()  noexcept { return data_; };
+		const value_type* data() const noexcept { return data_; };
+		value_type* data()  noexcept { return data_; };
 #pragma warning(suppress : 26440)
 		void swap(NaiveVector& other)
 		{
@@ -153,8 +166,18 @@ namespace workshop {
 		}
 	private:
 		size_type	size_ = 0;
-		int* data_ = nullptr;
+		value_type* data_ = nullptr;
 	};
+
+	inline bool operator==(const NaiveVector<int>& lhs, const NaiveVector<int>& rhs) noexcept {
+		return lhs.size() == rhs.size() && std::ranges::equal(lhs, rhs);
+	}
+
+	inline auto operator<=>(const NaiveVector<int>& lhs, const NaiveVector<int>& rhs) noexcept {
+		return std::lexicographical_compare_three_way(
+			lhs.begin(), lhs.end(),
+			rhs.begin(), rhs.end());
+	}
 
 
 }

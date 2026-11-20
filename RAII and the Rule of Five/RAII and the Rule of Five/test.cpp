@@ -1,13 +1,15 @@
 #include "pch.h"
 #include "NaiveVector.h"
 #include <cstddef>
+#include <concepts>
 
 DISABLE_WARNINGS_FROM_GTEST
 
 using workshop::NaiveVector;
+//static_assert(std::regular <NaiveVector>);
 
 TEST(NaiveVector, StartsEmpty) {
-	const NaiveVector values;
+	const NaiveVector<int> values;
 
 	EXPECT_EQ(std::size_t{ 0 }, values.size());
 	EXPECT_TRUE(values.empty());
@@ -15,7 +17,7 @@ TEST(NaiveVector, StartsEmpty) {
 }
 
 TEST(NaiveVector, HasFill) {
-	const NaiveVector values(5, 3);
+	const NaiveVector<int> values(5, 3);
 
 	EXPECT_EQ(std::size_t{ 5 }, values.size());
 	EXPECT_EQ(3, values.at(3));
@@ -24,17 +26,17 @@ TEST(NaiveVector, HasFill) {
 }
 
 TEST(NaiveVector, CanModefy) {
-	NaiveVector values(5, 3);
+	NaiveVector<int> values(5, 3);
 
 	values.at(0) = 2;
 	EXPECT_EQ(std::size_t{ 2 }, values.at(0));
 	EXPECT_EQ(std::size_t{ 3 }, values.at(1));
 }
 TEST(NaiveVector, CanCopy) {
-	NaiveVector values1(5, 3);
+	NaiveVector<int> values1(5, 3);
 	values1.at(0) = 2;
 
-	NaiveVector values2 = values1;
+	NaiveVector<int> values2 = values1;
 	EXPECT_NE(values1.data(), values2.data());
 
 	EXPECT_EQ(values1.at(0), values2.at(0));
@@ -43,10 +45,10 @@ TEST(NaiveVector, CanCopy) {
 }
 
 TEST(NaiveVector, CanCopyValue) {
-	NaiveVector values1(3, 3);
-	NaiveVector values2(5, 2);
+	NaiveVector<int> values1(3, 3);
+	NaiveVector<int> values2(5, 2);
 	values2 = values1;
-	NaiveVector valuesEmpty(0, 2);
+	NaiveVector<int> valuesEmpty(0, 2);
 	values1 = valuesEmpty;
 	(values2 = values2);
 
@@ -58,13 +60,13 @@ TEST(NaiveVector, CanCopyValue) {
 
 }
 TEST(NaiveVector, CanTransfer) {
-	NaiveVector values1(3, 3);
+	NaiveVector<int> values1(3, 3);
 	int* pointer = values1.data();
-	NaiveVector valuesSaved = std::move(values1);
-	NaiveVector valuesOwns(5, 7);
-	NaiveVector values2(6, 4);
-	NaiveVector valuesEmpty(0, 4);
-	NaiveVector valuesSelfMove(1, 2);
+	NaiveVector<int> valuesSaved = std::move(values1);
+	NaiveVector<int> valuesOwns(5, 7);
+	NaiveVector<int> values2(6, 4);
+	NaiveVector<int> valuesEmpty(0, 4);
+	NaiveVector<int> valuesSelfMove(1, 2);
 	valuesSelfMove = std::move(valuesSelfMove);
 	values2 = std::move(valuesEmpty);
 	valuesOwns = std::move(valuesSaved);
@@ -78,7 +80,7 @@ TEST(NaiveVector, CanTransfer) {
 	EXPECT_EQ(values2.data(), nullptr);
 	EXPECT_EQ(values2.size(), 0);
 
-	values1 = NaiveVector(8, 9);
+	values1 = NaiveVector<int>(8, 9);
 	EXPECT_EQ(values1.size(), 8);
 
 	EXPECT_EQ(valuesSelfMove.size(), 1);
@@ -87,17 +89,17 @@ TEST(NaiveVector, CanTransfer) {
 }
 
 TEST(NaiveVector, CanCopyEmpty) {
-	NaiveVector values1(0, 3);
+	NaiveVector<int> values1(0, 3);
 
-	NaiveVector values2 = values1;
+	NaiveVector<int> values2 = values1;
 	EXPECT_EQ(values2.data(), nullptr);
 }
 TEST(NaiveVector, CanCopyLifeTime) {
-	NaiveVector values1(3, 3);
+	NaiveVector <int>values1(3, 3);
 	values1.at(1) = 2;
 
 	{
-		NaiveVector values2 = values1;
+		NaiveVector<int> values2 = values1;
 
 	}
 
@@ -108,7 +110,7 @@ TEST(NaiveVector, CanCopyLifeTime) {
 
 TEST(NaiveVector, Empty)
 {
-	const NaiveVector values(0, 3);
+	const NaiveVector<int> values(0, 3);
 
 	EXPECT_TRUE(values.empty());
 
@@ -116,7 +118,7 @@ TEST(NaiveVector, Empty)
 
 TEST(NaiveVector, BracketTest)
 {
-	NaiveVector values(3, 3);
+	NaiveVector<int> values(3, 3);
 	values[1] = 5;
 
 	EXPECT_EQ(values.at(1), values[1]);
@@ -127,7 +129,7 @@ TEST(NaiveVector, BracketTest)
 
 TEST(NaiveVector, FrontBack)
 {
-	NaiveVector values(4, 88);
+	NaiveVector<int> values(4, 88);
 	std::ranges::iota(values, 0);
 	EXPECT_EQ(values.front(), 0);
 	//EXPECT_EQ(values[1], 1);
@@ -138,7 +140,7 @@ TEST(NaiveVector, FrontBack)
 #ifndef NDEBUG
 TEST(NaiveVector, FrontDeath)
 {
-	NaiveVector empty;
+	NaiveVector<int> empty;
 
 	EXPECT_DEATH(empty.front(), "empty");
 }
@@ -147,7 +149,7 @@ TEST(NaiveVector, FrontDeath)
 #ifndef NDEBUG
 TEST(NaiveVector, BackDeath)
 {
-	NaiveVector empty;
+	NaiveVector<int> empty;
 
 	EXPECT_DEATH(empty.back(), "empty");
 }
@@ -155,10 +157,10 @@ TEST(NaiveVector, BackDeath)
 
 TEST(NaiveVector, TestBegin)
 {
-	NaiveVector values(4, 88);
+	NaiveVector<int> values(4, 88);
 	std::ranges::iota(values, 0);
 
-	NaiveVector empty;
+	NaiveVector<int> empty;
 	EXPECT_EQ(*values.begin(), values.at(0));
 	EXPECT_EQ(empty.begin(), empty.end());
 }
@@ -166,17 +168,17 @@ TEST(NaiveVector, TestBegin)
 #ifndef NDEBUG
 TEST(NaiveVector, TestEnd)
 {
-	NaiveVector values(4, 88);
+	NaiveVector<int> values(4, 88);
 	std::ranges::iota(values, 0);
 
-	NaiveVector empty;
+	NaiveVector<int> empty;
 	EXPECT_EQ(values.end(), values.begin()+ values.size());
 	EXPECT_EQ(empty.begin(), empty.end());
 }
 #endif
 
 TEST(NaiveVector, RangeForVisitsEveryElement) {
-	NaiveVector values(3);
+	NaiveVector<int> values(3);
 	values.at(0) = 1;
 	values.at(1) = 10;
 	values.at(2) = 100;
@@ -190,7 +192,7 @@ TEST(NaiveVector, RangeForVisitsEveryElement) {
 }
 
 TEST(NaiveVector, RangeForVisitsEveryElement7) {
-	NaiveVector values(3);
+	NaiveVector<int> values(3);
 	values.at(0) = 1;
 	values.at(1) = 10;
 	values.at(2) = 100;
@@ -204,15 +206,106 @@ TEST(NaiveVector, RangeForVisitsEveryElement7) {
 }
 
 TEST(NaiveVector, TestFind) {
-	NaiveVector values(4, 88);
+	NaiveVector<int> values(4, 88);
 	std::ranges::iota(values, 0);
 
 	const NaiveVector values2 = values;
 
 	auto number2 = std::find(values2.begin(), values2.end(), 2);
 
-	ASSERT_NE(*number2, values2.at(1));
+	EXPECT_EQ(*number2, values2.at(2));
 	//EXPECT_EQ(values.at(2), 7);
+}
+
+TEST(NaiveVector, TestSort) {
+	NaiveVector<int> values(3);
+	values.at(0) = 3;
+	values.at(1) = 1;
+	values.at(2) = 2;
+
+	std::sort(values.begin(), values.end());
+
+	EXPECT_GT(values.at(1), values.at(0));
+	EXPECT_GT(values.at(2), values.at(1));
+}
+
+TEST(NaiveVector, TestEqual) {
+	const NaiveVector<int> values1(5, 3);
+	const NaiveVector<int> values2 = values1;
+	const NaiveVector<int> valuesDifferent(6,3);
+
+	EXPECT_TRUE(values1 == values2);
+	EXPECT_FALSE(values1 != values2);
+	EXPECT_TRUE(valuesDifferent != values1);
+}
+
+TEST(NaiveVector, TestEqualEmptyu) {
+	const NaiveVector<int> values1;
+	const NaiveVector<int> values2;
+
+	EXPECT_TRUE(values1 == values2);
+	//EXPECT_FALSE(values1 != values2);
+}
+
+//TEST(NaiveVector, TestRegular) {
+//	EXPECT_TRUE(std::regular <NaiveVector>);
+//}
+
+TEST(NaiveVector, TestSpaceShip) {
+	NaiveVector<int> values1(2,1);
+	values1.at(1) = 9;
+	NaiveVector<int> values2(2,1);
+	values2.at(0) = 2;
+	values2.at(1) = 0;
+
+	EXPECT_TRUE((values1 <=> values2) < 0);
+	EXPECT_TRUE((values2 <=> values1) > 0);
+	//EXPECT_FALSE(values1 != values2);
+}
+
+TEST(NaiveVector, TestSpaceShip2) {
+	NaiveVector<int> values1(3, 1);
+	values1.at(0) = 1;
+	values1.at(1) = 2;
+	values1.at(2) = 0;
+	NaiveVector<int> values2(2, 1);
+	values2.at(0) = 1;
+	values2.at(1) = 2;
+
+	EXPECT_TRUE((values2 <=> values1) < 0);
+	//EXPECT_FALSE(values1 != values2);
+}
+
+TEST(NaiveVector, TestSpaceShip3) {
+	NaiveVector<int> values1(3, 1);
+	values1.at(0) = 1;
+	values1.at(1) = 2;
+	values1.at(2) = 0;
+	NaiveVector<int> values2 = values1;
+
+	EXPECT_TRUE((values2 <=> values1) == 0);
+	//EXPECT_FALSE(values1 != values2);
+}
+
+TEST(NaiveVector, TestDouble) {
+	NaiveVector<double> values1(3, 1.2);
+
+	EXPECT_EQ(values1.at(1), 1.2);
+	//EXPECT_FALSE(values1 != values2);
+}
+
+TEST(NaiveVector, TestClear) {
+	NaiveVector<double> values1(3, 1.2);
+	values1.clear();
+	EXPECT_EQ(values1.begin(), values1.end());
+	//EXPECT_FALSE(values1 != values2);
+}
+
+TEST(NaiveVector, TestPushBack) {
+	NaiveVector<int> values;
+	values.push_back(1);
+	EXPECT_EQ(values.at(0),1);
+	//EXPECT_FALSE(values1 != values2);
 }
 
 RESTORE_WARNINGS
