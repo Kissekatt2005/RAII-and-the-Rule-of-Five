@@ -87,6 +87,26 @@ namespace workshop {
 			return data_[size() - 1];
 		}
 
+		iterator begin() noexcept {
+			assert(!empty());
+			return data();
+		}
+
+		const_iterator begin() const noexcept {
+			assert(!empty());
+			return data();
+		}
+
+		iterator end() noexcept {
+			assert(!empty());
+			return begin() + size();
+		}
+
+		const_iterator end() const noexcept {
+			assert(!empty());
+			return begin() + size();
+		}
+
 		std::size_t size() const noexcept { return size_; };
 		bool empty() const noexcept { return size_ == 0; };
 		const int* data() const noexcept { return data_; };

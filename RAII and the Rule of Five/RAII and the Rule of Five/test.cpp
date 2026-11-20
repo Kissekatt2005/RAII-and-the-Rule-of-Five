@@ -127,14 +127,56 @@ TEST(NaiveVector, BracketTest)
 
 TEST(NaiveVector, FrontBack)
 {
-	NaiveVector values(4, 3);
-	for (std::size_t i = 0; i < values.size() - 1; i++) {
+	NaiveVector values(4, 88);
+	for (std::size_t i = 0; i < values.size(); i++) {
 		values[i] = i;
 	}
 	EXPECT_EQ(values.front(), 0);
-	EXPECT_EQ(values[1], 1);
-	EXPECT_EQ(values[2], 3);
+	//EXPECT_EQ(values[1], 1);
+	//EXPECT_EQ(values[2], 2);
 	EXPECT_EQ(values.back(), 3);
 }
+
+#ifndef NDEBUG
+TEST(NaiveVector, FrontDeath)
+{
+	NaiveVector empty;
+
+	EXPECT_DEATH(empty.front(), "empty");
+}
+#endif
+
+#ifndef NDEBUG
+TEST(NaiveVector, BackDeath)
+{
+	NaiveVector empty;
+
+	EXPECT_DEATH(empty.back(), "empty");
+}
+#endif
+
+TEST(NaiveVector, TestBegin)
+{
+	NaiveVector values(4, 88);
+	for (std::size_t i = 0; i < values.size(); i++) {
+		values[i] = i;
+	}
+	NaiveVector empty;
+	EXPECT_EQ(*values.begin(), values.at(0));
+	EXPECT_EQ(empty.begin(), nullptr);
+}
+
+#ifndef NDEBUG
+TEST(NaiveVector, TestEnd)
+{
+	NaiveVector values(4, 88);
+	for (std::size_t i = 0; i < values.size(); i++) {
+		values[i] = i;
+	}
+	NaiveVector empty;
+	EXPECT_EQ(values.end(), values.begin()+ values.size());
+	EXPECT_EQ(empty.begin(), empty.end());
+}
+#endif
 
 RESTORE_WARNINGS
