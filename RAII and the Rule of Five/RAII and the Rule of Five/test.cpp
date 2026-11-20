@@ -175,4 +175,44 @@ TEST(NaiveVector, TestEnd)
 }
 #endif
 
+TEST(NaiveVector, RangeForVisitsEveryElement) {
+	NaiveVector values(3);
+	values.at(0) = 1;
+	values.at(1) = 10;
+	values.at(2) = 100;
+
+	int sum = 0;
+	for (const int value : values) {
+		sum += value;
+	}
+
+	EXPECT_EQ(sum, 111);
+}
+
+TEST(NaiveVector, RangeForVisitsEveryElement7) {
+	NaiveVector values(3);
+	values.at(0) = 1;
+	values.at(1) = 10;
+	values.at(2) = 100;
+
+	for (int& value : values) {
+		value = 7;
+	}
+
+	EXPECT_EQ(values.at(0), 7);
+	EXPECT_EQ(values.at(2), 7);
+}
+
+TEST(NaiveVector, TestFind) {
+	NaiveVector values(4, 88);
+	std::ranges::iota(values, 0);
+
+	const NaiveVector values2 = values;
+
+	auto number2 = std::find(values2.begin(), values2.end(), 2);
+
+	ASSERT_NE(*number2, values2.at(1));
+	//EXPECT_EQ(values.at(2), 7);
+}
+
 RESTORE_WARNINGS
