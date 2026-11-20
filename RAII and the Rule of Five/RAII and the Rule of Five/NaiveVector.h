@@ -3,12 +3,21 @@
 #include <stdexcept>
 #include <algorithm>
 #include <utility>
-
+#include <cassert>
+#include <numeric>
+#include <random> // default_random_engine
 
 namespace workshop {
 	class NaiveVector
 	{
 	public:
+		using value_type = int;
+		using size_type = std::size_t;
+		using reference = value_type&;
+		using const_reference = const value_type&;
+		using iterator = value_type*;
+		using const_iterator = const value_type*;
+
 		NaiveVector()  noexcept {};
 		explicit NaiveVector(std::size_t count, int value = 0) :size_{ count }, data_{ count > 0 ? new int[count] : nullptr } {
 			if (data_ != nullptr)
@@ -48,6 +57,36 @@ namespace workshop {
 			return *this;
 		}
 
+		reference operator[](std::size_t index) noexcept
+		{
+			assert(index < size_);
+			return data_[index];
+		}
+
+		const_reference operator[](std::size_t index) const noexcept
+		{
+			assert(index < size_);
+			return data_[index];
+		}
+
+		reference front() noexcept {
+			assert(!empty());
+			return data_[0];
+		}
+		const_reference front() const noexcept {
+			assert(!empty());
+			return data_[0];
+		}
+
+		reference back() noexcept {
+			assert(!empty());
+			return data_[size() - 1];
+		}
+		const_reference back() const noexcept {
+			assert(!empty());
+			return data_[size() - 1];
+		}
+
 		std::size_t size() const noexcept { return size_; };
 		bool empty() const noexcept { return size_ == 0; };
 		const int* data() const noexcept { return data_; };
@@ -58,7 +97,7 @@ namespace workshop {
 			std::swap(size_, other.size_);
 		}
 
-		int& at(std::size_t index)
+		reference at(std::size_t index)
 		{
 			if (index >= size_)
 			{
@@ -66,7 +105,7 @@ namespace workshop {
 			}
 			return data_[index];
 		}
-		const int& at(std::size_t index) const
+		const_reference at(std::size_t index) const
 		{
 			if (index >= size_)
 			{
@@ -75,7 +114,7 @@ namespace workshop {
 			return data_[index];
 		}
 	private:
-		std::size_t	size_ = 0;
+		size_type	size_ = 0;
 		int* data_ = nullptr;
 	};
 

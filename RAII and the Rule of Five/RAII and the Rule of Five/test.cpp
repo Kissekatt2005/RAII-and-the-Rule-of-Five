@@ -2,6 +2,8 @@
 #include "NaiveVector.h"
 #include <cstddef>
 
+DISABLE_WARNINGS_FROM_GTEST
+
 using workshop::NaiveVector;
 
 TEST(NaiveVector, StartsEmpty) {
@@ -111,3 +113,28 @@ TEST(NaiveVector, Empty)
 	EXPECT_TRUE(values.empty());
 
 }
+
+TEST(NaiveVector, BracketTest)
+{
+	NaiveVector values(3, 3);
+	values[1] = 5;
+
+	EXPECT_EQ(values.at(1), values[1]);
+	EXPECT_EQ(values.at(1), 5);
+	EXPECT_EQ(values[1], 5);
+	//EXPECT_EQ(values[5], 5);
+}
+
+TEST(NaiveVector, FrontBack)
+{
+	NaiveVector values(4, 3);
+	for (std::size_t i = 0; i < values.size() - 1; i++) {
+		values[i] = i;
+	}
+	EXPECT_EQ(values.front(), 0);
+	EXPECT_EQ(values[1], 1);
+	EXPECT_EQ(values[2], 3);
+	EXPECT_EQ(values.back(), 3);
+}
+
+RESTORE_WARNINGS

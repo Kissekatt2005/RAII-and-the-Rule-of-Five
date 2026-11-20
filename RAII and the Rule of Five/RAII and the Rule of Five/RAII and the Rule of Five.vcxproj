@@ -57,6 +57,8 @@
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
+      <AdditionalIncludeDirectories>D:\Program Files\Homework\c++\RAII-and-the-Rule-of-Five\RAII and the Rule of Five\packages\Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn.1.8.1.8\Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn.1.8.1.8.nupkg\build\native\include</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
