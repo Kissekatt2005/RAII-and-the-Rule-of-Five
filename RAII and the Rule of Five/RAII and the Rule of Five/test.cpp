@@ -128,9 +128,7 @@ TEST(NaiveVector, BracketTest)
 TEST(NaiveVector, FrontBack)
 {
 	NaiveVector values(4, 88);
-	for (std::size_t i = 0; i < values.size(); i++) {
-		values[i] = i;
-	}
+	std::ranges::iota(values, 0);
 	EXPECT_EQ(values.front(), 0);
 	//EXPECT_EQ(values[1], 1);
 	//EXPECT_EQ(values[2], 2);
@@ -158,21 +156,19 @@ TEST(NaiveVector, BackDeath)
 TEST(NaiveVector, TestBegin)
 {
 	NaiveVector values(4, 88);
-	for (std::size_t i = 0; i < values.size(); i++) {
-		values[i] = i;
-	}
+	std::ranges::iota(values, 0);
+
 	NaiveVector empty;
 	EXPECT_EQ(*values.begin(), values.at(0));
-	EXPECT_EQ(empty.begin(), nullptr);
+	EXPECT_EQ(empty.begin(), empty.end());
 }
 
 #ifndef NDEBUG
 TEST(NaiveVector, TestEnd)
 {
 	NaiveVector values(4, 88);
-	for (std::size_t i = 0; i < values.size(); i++) {
-		values[i] = i;
-	}
+	std::ranges::iota(values, 0);
+
 	NaiveVector empty;
 	EXPECT_EQ(values.end(), values.begin()+ values.size());
 	EXPECT_EQ(empty.begin(), empty.end());

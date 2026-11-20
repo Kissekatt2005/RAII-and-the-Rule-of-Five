@@ -88,22 +88,18 @@ namespace workshop {
 		}
 
 		iterator begin() noexcept {
-			assert(!empty());
 			return data();
 		}
 
 		const_iterator begin() const noexcept {
-			assert(!empty());
 			return data();
 		}
 
 		iterator end() noexcept {
-			assert(!empty());
 			return begin() + size();
 		}
 
 		const_iterator end() const noexcept {
-			assert(!empty());
 			return begin() + size();
 		}
 
